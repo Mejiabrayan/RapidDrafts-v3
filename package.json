@@ -1,0 +1,62 @@
+{
+  "name": "rapid-drafts.com",
+  "version": "0.3.5",
+  "private": true,
+  "prettier": {
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "supabase:start": "supabase start",
+    "supabase:status": "supabase status",
+    "supabase:stop": "supabase stop",
+    "supabase:db:reset": "supabase db reset",
+    "typegen": "supabase gen types typescript --local > database.types.ts",
+    "typecheck": "tsc",
+    "stripe:listen": "docker run --rm -it --name=stripe -v ~/.config/stripe:/root/.config/stripe stripe/stripe-cli:latest listen --forward-to http://host.docker.internal:3000/stripe/webhook"
+  },
+  "dependencies": {
+    "@radix-ui/react-avatar": "^1.0.4",
+    "@radix-ui/react-dialog": "^1.0.5",
+    "@radix-ui/react-dropdown-menu": "^2.0.6",
+    "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-slot": "^1.0.2",
+    "@supabase/ssr": "0.1.0",
+    "@supabase/supabase-js": "^2.45.1",
+    "@tanstack/react-query": "^5.24.1",
+    "@types/node": "20.11.19",
+    "@types/react": "18.2.56",
+    "@types/react-dom": "18.2.19",
+    "ai": "^2.2.36",
+    "autoprefixer": "10.4.17",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
+    "eslint": "8.57.0",
+    "eslint-config-next": "14.1.0",
+    "gpt3-tokenizer": "^1.1.5",
+    "lucide-react": "^0.341.0",
+    "next": "14.1.0",
+    "openai": "^4.28.0",
+    "postcss": "8.4.35",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-hook-form": "^7.50.1",
+    "server-only": "^0.0.1",
+    "stripe": "^14.18.0",
+    "supabase": "^1.145.4",
+    "tailwind-merge": "^2.2.1",
+    "tailwindcss": "3.4.1",
+    "tailwindcss-animate": "^1.0.7",
+    "typescript": "5.3.3",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "encoding": "^0.1.13",
+    "prettier": "^3.2.5"
+  }
+}
