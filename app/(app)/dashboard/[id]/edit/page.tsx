@@ -34,6 +34,16 @@ function EditPage({ params }: EditPostPageParams) {
             <span>Title</span>
             <Input name="title" defaultValue={post.title} required />
           </Label>
+          {/* date */}
+          <Label className="flex flex-col space-y-1.5">
+            <span>Date</span>
+            <Input
+              type="date"
+              name="date"
+              defaultValue={post.date}
+              required
+            />
+          </Label>
 
           <Label className="flex flex-col space-y-1.5">
             <span>Description</span>

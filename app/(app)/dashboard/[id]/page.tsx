@@ -32,7 +32,6 @@ function PostPage({ params }: PostPageParams) {
         </div>
       </div>
 
-      <h2 className="text-lg font-medium">{post.description}</h2>
 
       <div className="whitespace-break-spaces">{post.content}</div>
     </div>

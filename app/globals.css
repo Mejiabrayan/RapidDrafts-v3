@@ -84,3 +84,40 @@
       'calt' 1;
   }
 }
+
+::view-transition-old(sidebar-background) {
+  animation-name: slideOut;
+}
+
+::view-transition-new(sidebar-background) {
+  animation-name: slideIn;
+}
+
+::view-transition-old(sidebar-title),
+::view-transition-new(sidebar-title),
+::view-transition-old(sidebar-link-dashboard),
+::view-transition-new(sidebar-link-dashboard),
+::view-transition-old(sidebar-link-posts),
+::view-transition-new(sidebar-link-posts),
+::view-transition-old(sidebar-link-settings),
+::view-transition-new(sidebar-link-settings),
+::view-transition-old(sidebar-link-logout),
+::view-transition-new(sidebar-link-logout) {
+  animation: 300ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+::view-transition-old(sidebar-title),
+::view-transition-old(sidebar-link-dashboard),
+::view-transition-old(sidebar-link-posts),
+::view-transition-old(sidebar-link-settings),
+::view-transition-old(sidebar-link-logout) {
+  animation-name: fadeOut;
+}
+
+::view-transition-new(sidebar-title),
+::view-transition-new(sidebar-link-dashboard),
+::view-transition-new(sidebar-link-posts),
+::view-transition-new(sidebar-link-settings),
+::view-transition-new(sidebar-link-logout) {
+  animation-name: fadeIn;
+}
