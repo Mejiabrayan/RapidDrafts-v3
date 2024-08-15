@@ -2,7 +2,7 @@ import { permanentRedirect } from 'next/navigation';
 import getSupabaseServerComponentClient from '@/lib/supabase/server-component-client';
 
 async function AuthLayout({ children }: React.PropsWithChildren) {
-  await assertUserStatus();
+  await assertUserIsSignedOut();
 
   return (
     <div className={'flex h-screen flex-col items-center justify-center space-y-4 md:space-y-8'}>
@@ -15,31 +15,16 @@ async function AuthLayout({ children }: React.PropsWithChildren) {
 
 export default AuthLayout;
 
-async function assertUserStatus() {
+async function assertUserIsSignedOut() {
   const client = getSupabaseServerComponentClient();
 
   const {
     data: { user },
   } = await client.auth.getUser();
 
+  // If session is not null, the user is logged in
+  // `redirect` will throw an error that will be handled by Next.js
   if (user) {
-    // User is logged in, check their waitlist status
-    const { data: waitlistEntry, error } = await client
-      .from('waitlist')
-      .select('approved')
-      .eq('user_id', user.id)
-      .single();
-
-    if (error) {
-      console.error('Error fetching waitlist status:', error);
-      permanentRedirect('/error');
-    }
-
-    if (waitlistEntry?.approved) {
-      permanentRedirect('/dashboard');
-    } else {
-      permanentRedirect('/waitlist');
-    }
+    permanentRedirect('/dashboard');
   }
-  // If user is not logged in, allow them to proceed to the auth pages
 }

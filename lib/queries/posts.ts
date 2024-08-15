@@ -11,7 +11,9 @@ export async function fetchPosts(client: Client, userId: string) {
       id,
       uuid,
       title,
-      description
+      description,
+      content,
+      created_at
   `
     )
     .eq('user_id', userId);

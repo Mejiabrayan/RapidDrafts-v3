@@ -22,7 +22,7 @@ export const metadata = {
       'Scale your content production with AI-powered drafts. Perfect for digital marketing agencies and content creators.',
     images: [
       {
-        url: '/og-image.jpg',
+        url: '/og.png',
         width: 1200,
         height: 630,
         alt: 'Rapid Drafts AI Content Assistant',
@@ -36,7 +36,7 @@ export const metadata = {
     title: 'Rapid Drafts | AI-Powered Content for Agencies',
     description:
       'Revolutionize your content creation process with AI. Ideal for marketing agencies and professionals.',
-    images: ['/twitter-image.jpg'],
+    images: ['/og.png'],
   },
   robots: {
     index: true,

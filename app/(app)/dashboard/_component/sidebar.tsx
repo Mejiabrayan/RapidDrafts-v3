@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   LucideFileText,
   LucideHome,
@@ -19,15 +19,32 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-
-
-
 import { Button } from '@/components/ui/button';
-import { redirect } from 'next/navigation';
+
+const useMediaQuery = (query) => {
+  const [matches, setMatches] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    if (media.matches !== matches) {
+      setMatches(media.matches);
+    }
+    const listener = () => setMatches(media.matches);
+    window.addEventListener('resize', listener);
+    return () => window.removeEventListener('resize', listener);
+  }, [matches, query]);
+
+  return matches;
+};
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const user = useUserSession();
+  const isSmallScreen = useMediaQuery('(max-width: 768px)');
+
+  useEffect(() => {
+    setIsCollapsed(isSmallScreen);
+  }, [isSmallScreen]);
 
   return (
     <aside
@@ -85,7 +102,7 @@ const CollapsedSidebar = ({ setIsCollapsed }) => (
         tooltip="Dashboard"
       />
       <SidebarIcon
-        href="/new"
+        href="/posts"
         icon={<LucideFileText size={20} />}
         tooltip="Posts"
       />
@@ -95,7 +112,7 @@ const CollapsedSidebar = ({ setIsCollapsed }) => (
         tooltip="Settings"
       />
     </nav>
-    <div className="p-4 mt-auto flex justify-center">
+    <div className="p-4 mt-auto flex justify-center cursor-pointer">
       <ProfileDropdown />
     </div>
   </>
@@ -144,7 +161,7 @@ const ExpandedSidebar = ({ setIsCollapsed, user }) => (
         text="Settings"
       />
     </nav>
-    <div className="p-4 mt-auto flex items-center">
+    <div className="p-4 mt-auto flex items-center cursor-pointer">
       <ProfileDropdown />
       <div className="ml-3 overflow-hidden">
         {user?.email && (
