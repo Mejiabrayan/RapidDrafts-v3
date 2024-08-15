@@ -87,7 +87,7 @@ export default async function Home() {
         <div className="container mx-auto py-6">
           <div className="flex flex-col space-y-4 lg:flex-row lg:space-y-0 justify-between">
             <div>
-              <b>RapidDrafts</b>
+      <Image src="/logo.svg" alt="RapidDrafts Logo" width={100} height={50} />
               <div className="text-gray-600">
                 Empowering agencies with AI-driven content creation -{' '}
                 {new Date().getFullYear()}

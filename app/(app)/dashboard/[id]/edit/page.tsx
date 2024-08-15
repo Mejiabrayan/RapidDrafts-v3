@@ -1,9 +1,6 @@
-import { use } from 'react';
-
+import { Suspense } from 'react';
 import { fetchPostByUid } from '@/lib/queries/posts';
 import { updatePostAction } from '@/lib/actions/posts';
-
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
@@ -15,63 +12,57 @@ interface EditPostPageParams {
   };
 }
 
-function EditPage({ params }: EditPostPageParams) {
-  const post = use(loadPost(params.id));
+async function EditPage({ params }: EditPostPageParams) {
+  const post = await loadPost(params.id);
 
   return (
-    <div className="flex flex-col space-y-4 max-w-3xl mx-auto pb-16">
-      <div className="flex justify-between">
-        <h1 className="text-2xl font-semibold">
-          Edit Post &quot;{post.title}&quot;
-        </h1>
-      </div>
-
-      <form action={updatePostAction}>
-        <div className="flex flex-col space-y-4">
-          <input type="hidden" name="uid" value={post.uuid} />
-
-          <Label className="flex flex-col space-y-1.5">
-            <span>Title</span>
-            <Input name="title" defaultValue={post.title} required />
-          </Label>
-          {/* date */}
-          <Label className="flex flex-col space-y-1.5">
-            <span>Date</span>
-            <Input
-              type="date"
-              name="date"
-              defaultValue={post.date}
-              required
-            />
-          </Label>
-
-          <Label className="flex flex-col space-y-1.5">
-            <span>Description</span>
-            <Input
-              name="description"
-              defaultValue={post.description ?? ''}
-              required
-            />
-          </Label>
-
-          <Label className="flex flex-col space-y-1.5">
-            <span>Content</span>
-            <Textarea
-              className="min-h-[300px]"
-              name="content"
-              defaultValue={post.content}
-              required
-            />
-          </Label>
-
-          <Button>Save</Button>
-        </div>
-      </form>
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <Suspense fallback={<div className="text-center">Loading...</div>}>
+        <EditForm post={post} />
+      </Suspense>
     </div>
   );
 }
 
-export default EditPage;
+function EditForm({ post }) {
+  return (
+    <form action={updatePostAction} className="space-y-8 max-w-3xl mx-auto">
+      <input type="hidden" name="uid" value={post.uuid} />
+
+      <div className="prose prose-sm sm:prose lg:prose-lg xl:prose-xl mx-auto">
+        <Input
+          name="title"
+          defaultValue={post.title}
+          required
+          className="text-3xl sm:text-4xl md:text-3xl font-bold border-none px-4 py-2 w-full focus:outline-none focus:ring-0 bg-gray-50 text-balance"
+          placeholder="Title"
+        />
+
+        <Input
+          name="description"
+          defaultValue={post.description ?? ''}
+          required
+          className="text-lg sm:text-xl text-gray-600 border-none px-4 py-2 w-full focus:outline-none focus:ring-0 bg-gray-50 mt-4"
+          placeholder="Add a description..."
+        />
+
+        <Textarea
+          name="content"
+          defaultValue={post.content}
+          required
+          className="min-h-[50vh] sm:min-h-[60vh] md:min-h-[70vh] border-none px-4 py-2 w-full focus:outline-none ring-offset-0 focus:ring-0 mt-6"
+          placeholder="Start writing your post..."
+        />
+      </div>
+
+      <div className="flex justify-end mt-8">
+        <Button type="submit" className="px-6 py-2">
+          Save Changes
+        </Button>
+      </div>
+    </form>
+  );
+}
 
 async function loadPost(id: string) {
   const client = getSupabaseServerComponentClient();
@@ -83,3 +74,5 @@ async function loadPost(id: string) {
 
   return data;
 }
+
+export default EditPage;

@@ -18,7 +18,7 @@ interface GeneratePostParams {
   title: string;
 }
 
-const MODEL = `gpt-4o`;
+const MODEL = `gpt-3.5-turbo`;
 
 export async function createPostAction(formData: FormData) {
   const title = formData.get('title') as string;

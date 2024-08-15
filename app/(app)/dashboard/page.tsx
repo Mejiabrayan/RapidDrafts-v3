@@ -13,7 +13,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-
 async function DashboardPage() {
   const posts = await fetchDashboardPageData();
 
@@ -41,17 +40,15 @@ function PostCard({ post }) {
   return (
     <Link href={`/dashboard/${post.uuid}`} className="block">
       <Card className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
-        <CardTitle>
-          <h2 className="text-lg font-medium mb-2 truncate">{post.title}</h2>
+        <CardTitle className="text-lg font-medium mb-2 truncate">
+          {post.title}
         </CardTitle>
-        <CardDescription>
-          <p className="text-sm text-gray-500 mb-4 line-clamp-2">
-            {post.description || 'No description'}
-          </p>
+        <CardDescription className="text-sm text-gray-500 mb-4 line-clamp-2">
+          {post.description || 'No description'}
         </CardDescription>
-        <div className="text-xs text-gray-400">
+        <p className="text-xs text-gray-400">
           {new Date(post.created_at).toLocaleDateString()}
-        </div>
+        </p>
       </Card>
     </Link>
   );
@@ -63,7 +60,7 @@ function EmptyState() {
       <p className="text-gray-500 mb-4">No posts created yet.</p>
       <Button variant="outline">
         <Link href="/new" className="flex items-center space-x-2">
-          <span>Create your first post</span>
+          <p>Create your first post</p>
           <ArrowRightIcon className="w-4 h-4" />
         </Link>
       </Button>

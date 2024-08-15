@@ -7,6 +7,7 @@ interface InsertPostParams {
   title: string;
   content: string;
   user_id: string;
+  created_at: string;
 }
 
 interface UpdatePostParams {
