@@ -24,7 +24,7 @@ async function EditPage({ params }: EditPostPageParams) {
   );
 }
 
-function EditForm({ post }) {
+function EditForm({ post }: any) {
   return (
     <form action={updatePostAction} className="space-y-8 max-w-3xl mx-auto">
       <input type="hidden" name="uid" value={post.uuid} />
