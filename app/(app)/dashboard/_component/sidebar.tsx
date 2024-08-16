@@ -48,10 +48,10 @@ const Sidebar = () => {
 
   return (
     <aside
-      className={`${
-        isCollapsed ? 'w-16' : 'w-64'
-      } h-screen flex flex-col bg-white border-r border-gray-200 transition-all duration-300 ease-in-out`}
-    >
+    className={`${
+      isCollapsed ? 'w-16' : 'w-64'
+    } h-screen flex flex-col bg-white border-r border-gray-200 transition-all duration-300 ease-in-out fixed z-50`}
+  >
       {isCollapsed ? (
         <CollapsedSidebar setIsCollapsed={setIsCollapsed} />
       ) : (

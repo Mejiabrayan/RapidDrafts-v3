@@ -34,7 +34,7 @@ const DashboardHeader = () => {
   const isSmallScreen = useMediaQuery('(max-width: 768px)');
 
   const SearchBar = () => (
-    <div className="relative w-full sm:w-64 mr-4">
+    <div className="relative w-full sm:w-64 mr-2">
       <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
       <Input
         type="text"
@@ -82,7 +82,7 @@ const DashboardHeader = () => {
   );
 
   return (
-    <header className="py-4 bg-gray-50">
+    <header className="sticky top-0 z-40 py-4 bg-gray-50">
       <div className="container mx-auto px-4 flex items-center justify-between">
         {isSmallScreen ? <SmallScreenHeader /> : <LargeScreenHeader />}
       </div>

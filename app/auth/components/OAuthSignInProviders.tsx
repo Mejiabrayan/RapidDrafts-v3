@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 import { Provider } from '@supabase/gotrue-js';
 import { Button } from '@/components/ui/button';
-import useSignInWithOAuth from '@/app/auth/hooks/use-sign-in-with-oauth';
+import useSignInWithOAuth from '../hooks/use-sign-in-with-oauth.ts';
 
 const OAUTH_PROVIDERS: Provider[] = ['google'];
 

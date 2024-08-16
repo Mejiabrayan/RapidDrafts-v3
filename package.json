@@ -14,6 +14,7 @@
     "lint": "next lint",
     "supabase:start": "supabase start",
     "supabase:status": "supabase status",
+    "supabase:db:pull": "supabase db pull",
     "supabase:stop": "supabase stop",
     "supabase:db:reset": "supabase db reset",
     "typegen": "supabase gen types typescript --local > database.types.ts",

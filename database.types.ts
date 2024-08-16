@@ -216,44 +216,6 @@ export type Database = {
           },
         ]
       }
-      waitlist: {
-        Row: {
-          created_at: string | null
-          email: string
-          id: string
-          metadata: Json | null
-          status: string
-          updated_at: string | null
-          user_id: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          email: string
-          id?: string
-          metadata?: Json | null
-          status?: string
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          email?: string
-          id?: string
-          metadata?: Json | null
-          status?: string
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "waitlist_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
     }
     Views: {
       [_ in never]: never
