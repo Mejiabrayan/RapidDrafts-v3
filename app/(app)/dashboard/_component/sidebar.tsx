@@ -8,6 +8,7 @@ import {
   LucideChevronLeft,
   LucideChevronRight,
   LucidePlus,
+  LucideIcon,
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -21,15 +22,19 @@ import {
 } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 
-const useMediaQuery = (query) => {
-  const [matches, setMatches] = useState(false);
+interface User {
+  email: string;
+}
+
+const useMediaQuery = (query: string): boolean => {
+  const [matches, setMatches] = useState<boolean>(false);
 
   useEffect(() => {
     const media = window.matchMedia(query);
     if (media.matches !== matches) {
       setMatches(media.matches);
     }
-    const listener = () => setMatches(media.matches);
+    const listener = (): void => setMatches(media.matches);
     window.addEventListener('resize', listener);
     return () => window.removeEventListener('resize', listener);
   }, [matches, query]);
@@ -37,9 +42,9 @@ const useMediaQuery = (query) => {
   return matches;
 };
 
-const Sidebar = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const user = useUserSession();
+const Sidebar: React.FC = () => {
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+  const user = useUserSession() as User | null;
   const isSmallScreen = useMediaQuery('(max-width: 768px)');
 
   useEffect(() => {
@@ -48,10 +53,10 @@ const Sidebar = () => {
 
   return (
     <aside
-    className={`${
-      isCollapsed ? 'w-16' : 'w-64'
-    } h-screen flex flex-col bg-white border-r border-gray-200 transition-all duration-300 ease-in-out fixed z-50`}
-  >
+      className={`${
+        isCollapsed ? 'w-16' : 'w-64'
+      } h-screen flex flex-col bg-white border-r border-gray-200 transition-all duration-300 ease-in-out fixed z-50`}
+    >
       {isCollapsed ? (
         <CollapsedSidebar setIsCollapsed={setIsCollapsed} />
       ) : (
@@ -61,7 +66,11 @@ const Sidebar = () => {
   );
 };
 
-const CollapsedSidebar = ({ setIsCollapsed }) => (
+interface CollapsedSidebarProps {
+  setIsCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const CollapsedSidebar: React.FC<CollapsedSidebarProps> = ({ setIsCollapsed }) => (
   <>
     <div className="p-4 flex justify-center">
       <TooltipProvider>
@@ -118,7 +127,12 @@ const CollapsedSidebar = ({ setIsCollapsed }) => (
   </>
 );
 
-const ExpandedSidebar = ({ setIsCollapsed, user }) => (
+interface ExpandedSidebarProps {
+  setIsCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+  user: User | null;
+}
+
+const ExpandedSidebar: React.FC<ExpandedSidebarProps> = ({ setIsCollapsed, user }) => (
   <>
     <div className="flex items-center justify-between p-4">
       <Image
@@ -131,7 +145,7 @@ const ExpandedSidebar = ({ setIsCollapsed, user }) => (
       <Button
         onClick={() => setIsCollapsed(true)}
         className="p-1 rounded-full hover:bg-gray-100"
-        variant={'ghost'}
+        variant="ghost"
       >
         <LucideChevronLeft size={20} />
       </Button>
@@ -172,7 +186,13 @@ const ExpandedSidebar = ({ setIsCollapsed, user }) => (
   </>
 );
 
-const SidebarLink = ({ href, icon, text }) => (
+interface SidebarLinkProps {
+  href: string;
+  icon: React.ReactElement<LucideIcon>;
+  text: string;
+}
+
+const SidebarLink: React.FC<SidebarLinkProps> = ({ href, icon, text }) => (
   <Link
     href={href}
     className="flex items-center px-2 py-2 rounded-lg transition-colors duration-150 ease-in-out text-gray-700 hover:bg-gray-100"
@@ -182,7 +202,13 @@ const SidebarLink = ({ href, icon, text }) => (
   </Link>
 );
 
-const SidebarIcon = ({ href, icon, tooltip }) => (
+interface SidebarIconProps {
+  href: string;
+  icon: React.ReactElement<LucideIcon>;
+  tooltip: string;
+}
+
+const SidebarIcon: React.FC<SidebarIconProps> = ({ href, icon, tooltip }) => (
   <TooltipProvider>
     <Tooltip>
       <TooltipTrigger asChild>
