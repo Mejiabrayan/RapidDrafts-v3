@@ -22,7 +22,7 @@ async function DashboardPage() {
         <h1 className="text-xl sm:text-2xl font-medium">Your Drafts</h1>
       </div>
       {posts.length ? (
-        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-1 lg:grid-cols-2">
           {posts.map((post) => (
             <PostCard key={post.id} post={post} />
           ))}
@@ -36,7 +36,7 @@ async function DashboardPage() {
 
 export default DashboardPage;
 
-function PostCard({ post }) {
+function PostCard({ post }: any) {
   return (
     <Link href={`/dashboard/${post.uuid}`} className="block h-full">
       <Card className="bg-white p-4 sm:p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 h-full flex flex-col justify-between items-end overflow-y-scroll">

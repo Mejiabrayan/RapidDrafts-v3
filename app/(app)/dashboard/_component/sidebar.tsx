@@ -9,6 +9,8 @@ import {
   LucideChevronRight,
   LucidePlus,
   LucideIcon,
+  BookOpen,
+  BarChart2,
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -70,7 +72,9 @@ interface CollapsedSidebarProps {
   setIsCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CollapsedSidebar: React.FC<CollapsedSidebarProps> = ({ setIsCollapsed }) => (
+const CollapsedSidebar: React.FC<CollapsedSidebarProps> = ({
+  setIsCollapsed,
+}) => (
   <>
     <div className="p-4 flex justify-center">
       <TooltipProvider>
@@ -107,13 +111,13 @@ const CollapsedSidebar: React.FC<CollapsedSidebarProps> = ({ setIsCollapsed }) =
       </TooltipProvider>
       <SidebarIcon
         href="/dashboard"
-        icon={<LucideHome size={20} />}
-        tooltip="Dashboard"
+        icon={<BookOpen size={20} />}
+        tooltip="Content library"
       />
       <SidebarIcon
-        href="/posts"
-        icon={<LucideFileText size={20} />}
-        tooltip="Posts"
+        href="/dashboard/analytics"
+        icon={<BarChart2 size={20} />}
+        tooltip="Analytics"
       />
       <SidebarIcon
         href="/settings"
@@ -132,7 +136,11 @@ interface ExpandedSidebarProps {
   user: User | null;
 }
 
-const ExpandedSidebar: React.FC<ExpandedSidebarProps> = ({ setIsCollapsed, user }) => (
+const ExpandedSidebar: React.FC<ExpandedSidebarProps> = ({
+  setIsCollapsed,
+  user,
+}) => (
+  // TODO: REPLACE ICONS, FIX TOOL TIPS
   <>
     <div className="flex items-center justify-between p-4">
       <Image
@@ -151,7 +159,7 @@ const ExpandedSidebar: React.FC<ExpandedSidebarProps> = ({ setIsCollapsed, user 
       </Button>
     </div>
     <div className="px-4 mb-4">
-      <Link href="/new">
+      <Link href="/dashboard/new">
         <Button className="w-full justify-start" variant="outline">
           <LucidePlus className="mr-2 h-4 w-4" />
           Create Post
@@ -170,7 +178,7 @@ const ExpandedSidebar: React.FC<ExpandedSidebarProps> = ({ setIsCollapsed, user 
         text="Posts"
       />
       <SidebarLink
-        href="/settings"
+        href="/dashboard/settings"
         icon={<LucideSettings size={20} />}
         text="Settings"
       />
