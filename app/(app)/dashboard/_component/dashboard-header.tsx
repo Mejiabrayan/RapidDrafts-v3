@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Bell, HelpCircle, Search, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,9 +13,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { fetchPosts } from '@/lib/queries/posts';
+import getSupabaseBrowserClient from '@/lib/supabase/browser-client';
+import debounce from 'lodash/debounce';
 
-const useMediaQuery = (query) => {
-  const [matches, setMatches] = useState(false);
+const useMediaQuery = (query: string) => {
+  const [matches, setMatches] = useState<boolean>(false);
 
   useEffect(() => {
     const media = window.matchMedia(query);
@@ -32,6 +35,61 @@ const useMediaQuery = (query) => {
 
 const DashboardHeader = () => {
   const isSmallScreen = useMediaQuery('(max-width: 768px)');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [userPosts, setUserPosts] = useState<any[]>([]);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const supabase = getSupabaseBrowserClient();
+
+    const getUserData = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        setUserId(user.id);
+      }
+    };
+
+    getUserData();
+  }, []);
+
+  useEffect(() => {
+    const getUserPosts = async () => {
+      if (userId) {
+        const supabase = getSupabaseBrowserClient();
+        const { data, error } = await fetchPosts(supabase, userId);
+        if (data) {
+          setUserPosts(data);
+        } else if (error) {
+          console.error('Error fetching posts:', error);
+        }
+      }
+    };
+
+    getUserPosts();
+  }, [userId]);
+
+  const debouncedSearch = useCallback(
+    debounce((term: string) => {
+      if (term.trim() !== '') {
+        const filteredPosts = userPosts.filter((post) =>
+          post.title.toLowerCase().includes(term.toLowerCase()),
+        );
+        console.log(
+          'Filtered post titles:',
+          filteredPosts.map((post) => post.title),
+        );
+      }
+    }, 300),
+    [userPosts],
+  );
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const term = e.target.value;
+    setSearchTerm(term);
+    debouncedSearch(term);
+  };
 
   const SearchBar = () => (
     <div className="relative w-full sm:w-64 mr-2">
@@ -40,6 +98,8 @@ const DashboardHeader = () => {
         type="text"
         placeholder="Search drafts..."
         className="pl-8 pr-4 w-full"
+        value={searchTerm}
+        onChange={handleSearch}
       />
     </div>
   );

@@ -21,14 +21,14 @@ function PostPage({ params }: PostPageParams) {
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 ">
-      <Suspense fallback={<PostLoadingSkeleton />} >
+      <Suspense fallback={<PostLoadingSkeleton />}>
         <PostContent post={post} params={params} />
       </Suspense>
     </div>
   );
 }
 
-function PostContent({ post, params }) {
+function PostContent({ post, params }: any) {
   return (
     <>
       <div className="space-y-8 max-w-3xl mx-auto overflow-y-scroll">
@@ -59,7 +59,6 @@ function PostContent({ post, params }) {
   );
 }
 
-
 const PostLoadingSkeleton = () => {
   return (
     <div className="space-y-8 max-w-3xl mx-auto animate-pulse">
@@ -80,7 +79,6 @@ const PostLoadingSkeleton = () => {
         </div>
       </div>
 
-      {/* Action Buttons Skeleton */}
       <div className="flex justify-end space-x-4 mt-8">
         <div className="h-10 w-20 bg-gray-200 rounded"></div>
         <div className="h-10 w-20 bg-gray-200 rounded"></div>
