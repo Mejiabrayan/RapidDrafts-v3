@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { fetchPosts } from '@/lib/queries/posts';
 import getSupabaseBrowserClient from '@/lib/supabase/browser-client';
 import debounce from 'lodash/debounce';
+import { AnimatePresence, motion } from 'framer-motion';
 
 type Post = {
   id: number;
@@ -36,7 +37,39 @@ const SearchBar: React.FC<{
   filteredPosts: Post[];
 }> = React.memo(({ searchTerm, onSearchChange, filteredPosts }) => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setSelectedIndex(prev => (prev < filteredPosts.length - 1 ? prev + 1 : prev));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setSelectedIndex(prev => (prev > 0 ? prev - 1 : -1));
+    } else if (e.key === 'Enter' && selectedIndex >= 0) {
+      e.preventDefault();
+      onSearchChange(filteredPosts[selectedIndex].title);
+      setIsSearchFocused(false);
+    }
+  }, [filteredPosts, onSearchChange, selectedIndex]);
+
+  useEffect(() => {
+    if (resultsRef.current && selectedIndex >= 0) {
+      const selectedElement = resultsRef.current.children[selectedIndex] as HTMLElement;
+      selectedElement.scrollIntoView({ block: 'nearest' });
+    }
+  }, [selectedIndex]);
+
+  const highlightMatch = (text: string, query: string) => {
+    if (!query) return text;
+    const parts = text.split(new RegExp(`(${query})`, 'gi'));
+    return parts.map((part, index) => 
+      part.toLowerCase() === query.toLowerCase() ? 
+        <span key={index} className="bg-yellow-200 font-bold">{part}</span> : part
+    );
+  };
 
   return (
     <div className="relative w-full sm:w-64 mr-2">
@@ -49,31 +82,56 @@ const SearchBar: React.FC<{
         onChange={(e) => onSearchChange(e.target.value)}
         onFocus={() => setIsSearchFocused(true)}
         onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
+        onKeyDown={handleKeyDown}
         ref={searchInputRef}
+        aria-label="Search drafts"
+        aria-autocomplete="list"
+        aria-controls="search-results"
       />
-      {isSearchFocused && filteredPosts.length > 0 && (
-        <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
-          {filteredPosts.map((post) => (
-            <div
-              key={post.id}
-              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-              onMouseDown={(e) => e.preventDefault()} // Prevent blur event
-              onClick={() => {
-                console.log(`Clicked on post: ${post.title}`);
-                onSearchChange(post.title);
-                setIsSearchFocused(false);
-              }}
-            >
-              {post.title}
-            </div>
-          ))}
-        </div>
-      )}
+      <AnimatePresence>
+        {isSearchFocused && (searchTerm.trim() !== '' || filteredPosts.length > 0) && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto"
+            ref={resultsRef}
+            id="search-results"
+            role="listbox"
+          >
+            {filteredPosts.length > 0 ? (
+              filteredPosts.map((post, index) => (
+                <div
+                  key={post.id}
+                  className={`px-4 py-2 cursor-pointer ${
+                    index === selectedIndex ? 'bg-blue-100' : 'hover:bg-gray-100'
+                  }`}
+                  onMouseDown={(e) => e.preventDefault()} // Prevent blur event
+                  onClick={() => {
+                    onSearchChange(post.title);
+                    setIsSearchFocused(false);
+                  }}
+                  role="option"
+                  aria-selected={index === selectedIndex}
+                >
+                  {highlightMatch(post.title, searchTerm)}
+                </div>
+              ))
+            ) : (
+              <div className="px-4 py-2 text-gray-500 italic">
+                No results found
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 });
 
 SearchBar.displayName = 'SearchBar';
+
 
 const IconButtons: React.FC = () => (
   <>
