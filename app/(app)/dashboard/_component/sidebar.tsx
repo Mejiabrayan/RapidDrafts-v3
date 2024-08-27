@@ -169,13 +169,13 @@ const ExpandedSidebar: React.FC<ExpandedSidebarProps> = ({
     <nav className="flex-1 px-2 py-4 space-y-1">
       <SidebarLink
         href="/dashboard"
-        icon={<LucideHome size={20} />}
-        text="Dashboard"
+        icon={<BookOpen size={20} />}
+        text="Content Library"
       />
       <SidebarLink
-        href="/posts"
-        icon={<LucideFileText size={20} />}
-        text="Posts"
+        href="/analytics"
+        icon={<BarChart2 size={20} />}
+        text="Analytics"
       />
       <SidebarLink
         href="/dashboard/settings"

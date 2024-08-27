@@ -11,6 +11,7 @@ const inter = Inter({ subsets: ['latin'] });
 export const runtime = 'edge';
 
 export const metadata = {
+  metadataBase: new URL('https://rapiddrafts.com'),
   title: 'Rapid Drafts | AI-Powered Content Creation for Marketing Agencies',
   description:
     'Rapid Drafts is an advanced AI content assistant designed for digital marketing agencies. Generate high-quality blog posts, articles, and marketing copy in minutes. Scale your content production, impress clients, and boost ROI.',

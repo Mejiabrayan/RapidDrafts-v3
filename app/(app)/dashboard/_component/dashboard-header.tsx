@@ -67,7 +67,7 @@ const SearchBar: React.FC<{
     const parts = text.split(new RegExp(`(${query})`, 'gi'));
     return parts.map((part, index) => 
       part.toLowerCase() === query.toLowerCase() ? 
-        <span key={index} className="bg-yellow-200 font-bold">{part}</span> : part
+        <span key={index} className="bg-blue-400 font-bold text-white">{part}</span> : part
     );
   };
 

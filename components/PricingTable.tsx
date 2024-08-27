@@ -1,95 +1,81 @@
 'use client';
 
-import { CheckCircleIcon } from 'lucide-react';
-import { useState } from 'react';
-
+import { CheckIcon } from 'lucide-react';
 import plans from '../lib/stripe/plans';
 import { Button } from './ui/button';
 import { createCheckoutAction } from '@/lib/actions/subscription';
 
 function PricingTable() {
-  const [selectedCycle, setSelectedCycle] = useState<'monthly' | 'yearly'>(
-    'monthly',
-  );
-
-  const getVariant = (cycle: 'monthly' | 'yearly') => {
-    if (cycle === selectedCycle) {
-      return 'default';
-    }
-
-    return 'ghost';
-  };
-
   return (
     <div className="flex flex-col space-y-8 items-center">
-      <div className="flex justify-center">
-        <div className="flex space-x-1">
-          <Button
-            type="button"
-            onClick={() => setSelectedCycle('monthly')}
-            variant={getVariant('monthly')}
-          >
-            Monthly
-          </Button>
-
-          <Button
-            type="button"
-            onClick={() => setSelectedCycle('yearly')}
-            variant={getVariant('yearly')}
-          >
-            Yearly
-          </Button>
-        </div>
-      </div>
-
-      <div className="flex space-x-4">
-        {plans.map((plan) => {
-          const selectedPrice = plan.prices.find(({ name }) => {
-            return name.toLowerCase() === selectedCycle;
-          });
-
-          if (!selectedPrice) {
-            console.warn(
-              `No price found for ${selectedCycle}. You may need to add a price to the ${plan.name} plan.`,
-            );
-
-            return null;
-          }
+      <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+        {plans.map((plan, index) => {
+          const price = plan.prices[0]; // Only one price per plan now
+          const isMiddleCard = index === 1;
 
           return (
-            <form key={selectedPrice.price} action={createCheckoutAction}>
-              <div
-                className="flex flex-col space-y-4 p-6 rounded-xl border
-            border-gray-100 shadow-sm dark:border-slate-800"
-              >
-                <h2 className="font-semibold text-lg">{plan.name}</h2>
-
-                <div className="flex items-center space-x-1">
-                  <span className="text-2xl font-bold">
-                    ${selectedPrice.price}
-                  </span>
-                  <span className="lowercase text-sm">
-                    /{selectedPrice.name}
-                  </span>
-                </div>
-
-                <div className="flex flex-col space-y-1">
-                  {plan.features.map((feature) => {
-                    return (
-                      <div
-                        key={feature}
-                        className="flex space-x-2.5 items-center text-sm"
-                      >
-                        <CheckCircleIcon className="w-4 h-4 text-green-500" />
-                        <span>{feature}</span>
+            <form key={price.id} action={createCheckoutAction} className="w-full md:w-1/3">
+              <div className="relative">
+                {isMiddleCard && (
+                  <div className="absolute -inset-2 rounded-xl bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 opacity-75 blur"></div>
+                )}
+                <div
+                  className={`relative flex flex-col h-full rounded-xl ${
+                    isMiddleCard
+                      ? 'shadow-lg transform scale-105 z-10'
+                      : 'shadow-sm'
+                  }`}
+                >
+                  <div
+                    className={`flex flex-col h-96 space-y-6 p-6 rounded-xl ${
+                      isMiddleCard
+                        ? 'relative bg-white'
+                        : 'bg-white border border-gray-200'
+                    }`}
+                  >
+                    <div className="flex flex-col space-y-1">
+                      <span className="text-sm font-medium text-gray-500">
+                        {plan.name}
+                      </span>
+                      <div className="flex items-baseline">
+                        <span className="text-4xl font-bold">${price.price}</span>
+                        <span className="ml-1 text-sm text-gray-500">
+                          / {price.name.toLowerCase()}
+                        </span>
                       </div>
-                    );
-                  })}
+                      <span className="text-sm text-gray-500">
+                        {index === 0 ? 'Best for blogs and personal websites' : 
+                         index === 1 ? 'Best for small businesses and startups' : 
+                         'Best for high traffic websites and resellers'}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col space-y-3 pt-4 flex-grow">
+                      {plan.features.map((feature) => (
+                        <div
+                          key={feature}
+                          className="flex items-center space-x-3 text-sm"
+                        >
+                          <CheckIcon className="w-5 h-5 text-green-500 flex-shrink-0" />
+                          <span>{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    <input
+                      type="hidden"
+                      name="priceId"
+                      value={price.id}
+                    />
+
+                    <Button
+                      variant={isMiddleCard ? 'default' : 'outline'}
+                      className="w-full mt-auto py-2"
+                    >
+                      {isMiddleCard ? 'Start 14-day free trial' : 'Start free trial'}
+                    </Button>
+                  </div>
                 </div>
-
-                <input type="hidden" name="priceId" value={selectedPrice?.id} />
-
-                <Button variant={'outline'}>Subscribe</Button>
               </div>
             </form>
           );

@@ -43,7 +43,7 @@ export default async function Home() {
           <div className="flex flex-col space-y-8">
             <div className="flex justify-center">
               <span className="py-2 px-4 rounded-full shadow-md dark:shadow-gray-500 text-sm bg-blue-100 text-blue-800">
-                Supercharge your content production
+                Supercharge your content production ⚡️
               </span>
             </div>
 
@@ -71,7 +71,7 @@ export default async function Home() {
               <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-blue-300 to-blue-400 rounded-lg blur opacity-75"></div>
               <div className="relative">
                 <Image
-                  src="/screenshot.png"
+                  src="/og.png"
                   alt="Product Screenshot"
                   className="max-w-full h-auto rounded-lg shadow-xl relative z-10"
                   width={1000}
@@ -80,6 +80,20 @@ export default async function Home() {
               </div>
             </div>
           </div>
+          <section className="space-y-8">
+            <div className="flex flex-col items-center space-y-4">
+              <span className="py-2 px-4 rounded-full shadow-md dark:shadow-gray-500 text-sm bg-blue-100 text-blue-800">
+                Choose Your Plan
+              </span>
+              <h2 className="text-3xl lg:text-4xl xl:text-6xl py-3 font-medium text-center max-w-2xl mx-auto bg-gradient-to-r from-blue-700 via-blue-400 to-blue-300 text-transparent bg-clip-text">
+                Flexible Pricing for Every Agency
+              </h2>
+              <p className="text-center text-lg text-gray-600 font-light max-w-2xl mx-auto">
+                Select the perfect plan to supercharge your content creation process
+              </p>
+            </div>
+            <PricingTable />
+          </section>
         </div>
       </main>
 
