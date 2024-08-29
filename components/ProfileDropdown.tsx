@@ -25,30 +25,32 @@ function ProfileDropdown() {
   const displayName = useDisplayName(user);
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Avatar>
-          <AvatarFallback>{displayName}</AvatarFallback>
-        </Avatar>
-      </DropdownMenuTrigger>
+    <div className="flex justify-end">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Avatar className="cursor-pointer hover:opacity-80 transition-opacity">
+            <AvatarFallback>{displayName}</AvatarFallback>
+          </Avatar>
+        </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="w-56" align="end">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <Link href={'/dashboard'}>
-            <DropdownMenuItem>
-              <LayoutDashboard className="mr-2 h-4 w-4" />
-              <span>Dashboard</span>
-            </DropdownMenuItem>
-          </Link>
-        </DropdownMenuGroup>
-        <DropdownMenuItem onClick={signOut}>
-          <LogOut className="mr-2 h-4 w-4" />
-          <span>Log out</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        <DropdownMenuContent className="w-48" align="right">
+          <DropdownMenuLabel className="font-semibold">My Account</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuGroup>
+            <Link href="/dashboard">
+              <DropdownMenuItem className="flex items-center">
+                <LayoutDashboard className="mr-2 h-4 w-4" />
+                <span>Dashboard</span>
+              </DropdownMenuItem>
+            </Link>
+          </DropdownMenuGroup>
+          <DropdownMenuItem onClick={signOut} className="flex items-center text-red-500 hover:text-red-600">
+            <LogOut className="mr-2 h-4 w-4" />
+            <span>Log out</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 }
 
@@ -70,6 +72,6 @@ function useDisplayName(user: User | undefined) {
       return email.substring(0, 2).toUpperCase();
     }
 
-    return <UserIcon className="h-4" />;
+    return <UserIcon className="h-4 w-4" />;
   }, [user]);
 }
