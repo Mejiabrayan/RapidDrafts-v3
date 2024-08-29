@@ -1,5 +1,7 @@
 const BASIC_PLAN_TOKENS = Number(process.env.BASIC_PLAN_TOKENS);
 const PRO_PLAN_TOKENS = Number(process.env.PRO_PLAN_TOKENS);
+const FREE_PLAN_TOKENS = Number(process.env.FREE_PLAN_TOKENS);
+
 
 const plans = [
   {
@@ -12,7 +14,7 @@ const plans = [
         name: 'Monthly',
         description: 'Free plan',
         price: 0,
-        tokens: 10000, // Adjust this value as needed
+        tokens: FREE_PLAN_TOKENS,
       },
     ],
   },

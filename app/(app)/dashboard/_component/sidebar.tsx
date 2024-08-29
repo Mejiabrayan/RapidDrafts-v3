@@ -23,26 +23,14 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
+import getSupabaseServerComponentClient from '@/lib/supabase/server-component-client';
+import getUserThresholds from '@/lib/queries/thresholds';
+import useMediaQuery from '@/lib/hooks/use-media-query';
+import ThresholdDisplay from '@/components/threshold-display';
 
 interface User {
   email: string;
 }
-
-const useMediaQuery = (query: string): boolean => {
-  const [matches, setMatches] = useState<boolean>(false);
-
-  useEffect(() => {
-    const media = window.matchMedia(query);
-    if (media.matches !== matches) {
-      setMatches(media.matches);
-    }
-    const listener = (): void => setMatches(media.matches);
-    window.addEventListener('resize', listener);
-    return () => window.removeEventListener('resize', listener);
-  }, [matches, query]);
-
-  return matches;
-};
 
 const Sidebar: React.FC = () => {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
@@ -140,7 +128,6 @@ const ExpandedSidebar: React.FC<ExpandedSidebarProps> = ({
   setIsCollapsed,
   user,
 }) => (
-  // TODO: REPLACE ICONS, FIX TOOL TIPS
   <>
     <div className="flex items-center justify-between p-4">
       <Image
@@ -183,6 +170,9 @@ const ExpandedSidebar: React.FC<ExpandedSidebarProps> = ({
         text="Settings"
       />
     </nav>
+    <div className="px-4 py-2">
+      <ThresholdDisplay />
+    </div>
     <div className="p-4 mt-auto flex items-center cursor-pointer">
       <ProfileDropdown />
       <div className="ml-3 overflow-hidden">
@@ -233,5 +223,6 @@ const SidebarIcon: React.FC<SidebarIconProps> = ({ href, icon, tooltip }) => (
     </Tooltip>
   </TooltipProvider>
 );
+
 
 export default Sidebar;

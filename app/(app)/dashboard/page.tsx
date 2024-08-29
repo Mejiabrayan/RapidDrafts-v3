@@ -1,7 +1,9 @@
+import { Suspense } from 'react';
 import { Link } from 'next-view-transitions';
 import { redirect } from 'next/navigation';
 import { ArrowRightIcon, PlusIcon } from 'lucide-react';
 import { fetchPosts } from '@/lib/queries/posts';
+import { getUserThresholds } from '@/lib/queries/thresholds';
 import { Button } from '@/components/ui/button';
 import getSupabaseServerComponentClient from '@/lib/supabase/server-component-client';
 import {
@@ -12,29 +14,38 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import ThresholdDisplay  from '@/components/threshold-display';
 
-async function DashboardPage() {
-  const posts = await fetchDashboardPageData();
-
+function DashboardPage() {
   return (
     <div className="p-4 sm:p-6 md:p-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-xl sm:text-2xl font-medium">Your Drafts</h1>
       </div>
-      {posts.length ? (
-        <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-1 lg:grid-cols-2">
-          {posts.map((post) => (
-            <PostCard key={post.id} post={post} />
-          ))}
-        </div>
-      ) : (
-        <EmptyState />
-      )}
+      <Suspense fallback={<div>Loading...</div>}>
+        <PostsList />
+      </Suspense>
     </div>
   );
 }
 
 export default DashboardPage;
+
+async function PostsList() {
+  const { posts, tokens } = await fetchDashboardPageData();
+
+  if (posts.length === 0) {
+    return <EmptyState />;
+  }
+
+  return (
+    <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-1 lg:grid-cols-2">
+      {posts.map((post) => (
+        <PostCard key={post.id} post={post} />
+      ))}
+    </div>
+  );
+}
 
 function PostCard({ post }: any) {
   return (
@@ -59,9 +70,14 @@ function PostCard({ post }: any) {
 function EmptyState() {
   return (
     <div className="flex flex-col items-center justify-center h-64 bg-gray-50 rounded-lg p-4 text-center">
-      <p className="text-gray-500 mb-4 text-sm sm:text-base">No posts created yet.</p>
+      <p className="text-gray-500 mb-4 text-sm sm:text-base">
+        No posts created yet.
+      </p>
       <Button variant="outline" className="w-full sm:w-auto">
-        <Link href="/new" className="flex items-center justify-center space-x-2">
+        <Link
+          href="/new"
+          className="flex items-center justify-center space-x-2"
+        >
           <p>Create your first post</p>
           <ArrowRightIcon className="w-4 h-4" />
         </Link>
@@ -79,11 +95,12 @@ async function fetchDashboardPageData() {
     redirect('/auth/sign-in');
   }
 
-  const { data, error } = await fetchPosts(client, user.id);
+  const { data: posts, error } = await fetchPosts(client, user.id);
+  const { tokens } = await getUserThresholds(client, user.id);
 
   if (error) {
     throw error;
   }
 
-  return data;
+  return { posts, tokens };
 }

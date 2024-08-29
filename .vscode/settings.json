@@ -4,5 +4,11 @@
     "editor.quickSuggestions": {
         "comments": "on",
         "strings": "on"
-    }
+    },
+    "workbench.editor.enablePreview": false,
+    "editor.suggest.preview": true,
+    "workbench.editor.enablePreviewFromCodeNavigation": true,
+    "workbench.editor.enablePreviewFromQuickOpen": true,
+    "editor.rename.enablePreview": false,
+    "search.useReplacePreview": false
 }
