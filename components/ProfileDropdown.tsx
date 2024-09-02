@@ -33,7 +33,7 @@ function ProfileDropdown() {
           </Avatar>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent className="w-48" align="right">
+        <DropdownMenuContent className="w-48" align="start">
           <DropdownMenuLabel className="font-semibold">My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>

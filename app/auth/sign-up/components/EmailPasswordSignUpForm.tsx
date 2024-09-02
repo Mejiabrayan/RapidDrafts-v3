@@ -34,26 +34,40 @@ function EmailPasswordSignUpForm() {
   }
 
   return (
-    <form className="w-full" onSubmit={handleSubmit}>
-      <div className="flex flex-col space-y-4">
-        <h1 className="text-lg text-center font-semibold">Create an account</h1>
-
-        <Label className="flex flex-col space-y-1.5">
-          <span>Email</span>
-          <Input autoComplete="off" required type="email" name="email" />
-        </Label>
-
-        <Label className="flex flex-col space-y-1.5">
-          <span>Password</span>
-          <Input required type="password" name="password" />
-        </Label>
-
-        {isError ? <ErrorAlert /> : null}
-
-        <Button disabled={isPending}>
-          {isPending ? 'Signing up...' : 'Sign Up'}
-        </Button>
+    <form className="w-full space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+      <div className="space-y-2">
+        <Label htmlFor="email">Email</Label>
+        <Input
+          id="email"
+          autoComplete="off"
+          required
+          type="email"
+          name="email"
+          className="w-full p-3 border rounded-lg"
+          placeholder="Enter your email"
+        />
       </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="password">Password</Label>
+        <Input
+          id="password"
+          required
+          type="password"
+          name="password"
+          className="w-full p-3 border rounded-lg"
+          placeholder="Create a password"
+        />
+      </div>
+
+      {isError ? <ErrorAlert /> : null}
+
+      <Button
+        disabled={isPending}
+        className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-200"
+      >
+        {isPending ? 'Signing up...' : 'Create Account'}
+      </Button>
     </form>
   );
 }
@@ -74,13 +88,13 @@ function ErrorAlert() {
 
 function SuccessAlert() {
   return (
-    <Alert variant="default">
-      <CheckIcon className="h-4 w-4 !text-green-500" />
-      <AlertTitle className="text-green-500">Confirm your Email</AlertTitle>
-      <AlertDescription>
-        Awesome, you&apos;re almost there! We&apos;ve sent you an email to
-        confirm your email address. Please click the link in the email to
-        complete your sign up.
+    <Alert variant="default" className="bg-green-50 border-green-200">
+      <CheckIcon className="h-4 w-4 text-green-500" />
+      <AlertTitle className="text-green-700">Confirm your Email</AlertTitle>
+      <AlertDescription className="text-green-600">
+        Awesome, you&apos;re almost there! We&apos;ve sent you an email to confirm your
+        email address. Please click the link in the email to complete your sign
+        up.
       </AlertDescription>
     </Alert>
   );

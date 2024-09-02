@@ -15,6 +15,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import ThresholdDisplay  from '@/components/threshold-display';
+import { Skeleton } from '@/components/ui/skeleton';
 
 function DashboardPage() {
   return (
@@ -22,7 +23,7 @@ function DashboardPage() {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-xl sm:text-2xl font-medium">Your Drafts</h1>
       </div>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<LoadingSkeleton />}>
         <PostsList />
       </Suspense>
     </div>
@@ -30,6 +31,23 @@ function DashboardPage() {
 }
 
 export default DashboardPage;
+
+function LoadingSkeleton() {
+  return (
+    <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-1 lg:grid-cols-2">
+      {[...Array(4)].map((_, index) => (
+        <Card key={index} className="bg-white p-4 sm:p-6 rounded-lg shadow-sm h-full flex flex-col justify-between">
+          <div>
+            <Skeleton className="h-6 w-3/4 mb-2" />
+            <Skeleton className="h-4 w-full mb-1" />
+            <Skeleton className="h-4 w-5/6" />
+          </div>
+          <Skeleton className="h-3 w-1/4 mt-4 self-end" />
+        </Card>
+      ))}
+    </div>
+  );
+}
 
 async function PostsList() {
   const { posts, tokens } = await fetchDashboardPageData();

@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import getSupabaseServerComponentClient from '@/lib/supabase/server-component-client';
+import Spinner from '@/components/Spinner';
 
 interface EditPostPageParams {
   params: {
@@ -16,8 +17,8 @@ async function EditPage({ params }: EditPostPageParams) {
   const post = await loadPost(params.id);
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <Suspense fallback={<div className="text-center">Loading...</div>}>
+    <div className="h-full w-full flex flex-col">
+      <Suspense fallback={<div className="flex-grow flex justify-center items-center"><Spinner /></div>}>
         <EditForm post={post} />
       </Suspense>
     </div>
@@ -26,37 +27,36 @@ async function EditPage({ params }: EditPostPageParams) {
 
 function EditForm({ post }: any) {
   return (
-    <form action={updatePostAction} className="space-y-8 max-w-3xl mx-auto">
+    <form action={updatePostAction} className="flex flex-col h-full">
       <input type="hidden" name="uid" value={post.uuid} />
 
-      <div className="prose prose-sm sm:prose lg:prose-lg xl:prose-xl mx-auto">
+      <div className="flex-grow flex flex-col space-y-6 overflow-auto">
         <Input
           name="title"
           defaultValue={post.title}
           required
-          className="text-3xl sm:text-4xl md:text-3xl font-bold border-none px-4 py-2 w-full focus:outline-none focus:ring-0 bg-gray-50 text-balance"
-          placeholder="Title"
+          className="text-3xl font-bold border-none px-0 w-full focus:outline-none focus:ring-0 bg-transparent placeholder-gray-300"
+          placeholder="Enter your title"
         />
 
         <Input
           name="description"
           defaultValue={post.description ?? ''}
-          required
-          className="text-lg sm:text-xl text-gray-600 border-none px-4 py-2 w-full focus:outline-none focus:ring-0 bg-gray-50 mt-4"
-          placeholder="Add a description..."
+          className="text-lg text-gray-600 border-none px-0 w-full focus:outline-none focus:ring-0 bg-transparent placeholder-gray-300"
+          placeholder="Add a brief description..."
         />
 
         <Textarea
           name="content"
           defaultValue={post.content}
           required
-          className="min-h-[50vh] sm:min-h-[60vh] md:min-h-[70vh] border-none px-4 py-2 w-full focus:outline-none ring-offset-0 focus:ring-0 mt-6"
+          className="flex-grow border-none px-0 w-full focus:outline-none focus:ring-0 bg-transparent placeholder-gray-300 resize-none h-screen"
           placeholder="Start writing your post..."
         />
       </div>
 
-      <div className="flex justify-end mt-8">
-        <Button type="submit" className="px-6 py-2">
+      <div className="mt-4 flex justify-end">
+        <Button type="submit" className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition duration-200">
           Save Changes
         </Button>
       </div>

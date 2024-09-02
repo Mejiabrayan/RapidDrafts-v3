@@ -10,7 +10,7 @@ import {
   LucidePlus,
   LucideIcon,
   BookOpen,
-  BarChart2,
+  Workflow,
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -24,7 +24,6 @@ import {
 } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import getSupabaseServerComponentClient from '@/lib/supabase/server-component-client';
-import getUserThresholds from '@/lib/queries/thresholds';
 import useMediaQuery from '@/lib/hooks/use-media-query';
 import ThresholdDisplay from '@/components/threshold-display';
 
@@ -103,9 +102,9 @@ const CollapsedSidebar: React.FC<CollapsedSidebarProps> = ({
         tooltip="Content library"
       />
       <SidebarIcon
-        href="/dashboard/analytics"
-        icon={<BarChart2 size={20} />}
-        tooltip="Analytics"
+        href="/dashboard/campaigns"
+        icon={<Workflow size={20} />}
+        tooltip="Campaigns"
       />
       <SidebarIcon
         href="/settings"
@@ -160,9 +159,9 @@ const ExpandedSidebar: React.FC<ExpandedSidebarProps> = ({
         text="Content Library"
       />
       <SidebarLink
-        href="/analytics"
-        icon={<BarChart2 size={20} />}
-        text="Analytics"
+        href="/dashboard/campaigns"
+        icon={<Workflow size={20} />}
+        text="Campaigns"
       />
       <SidebarLink
         href="/dashboard/settings"
@@ -223,6 +222,5 @@ const SidebarIcon: React.FC<SidebarIconProps> = ({ href, icon, tooltip }) => (
     </Tooltip>
   </TooltipProvider>
 );
-
 
 export default Sidebar;

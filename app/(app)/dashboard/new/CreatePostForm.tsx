@@ -47,7 +47,7 @@ function CreatePostForm() {
   );
 }
 
-function TopicInput({ topic, setTopic, nextStep }) {
+function TopicInput({ topic, setTopic, nextStep }: any) {
   return (
     <div className="space-y-4 mt-4">
       <Label className="flex flex-col space-y-2">
@@ -69,7 +69,7 @@ function TopicInput({ topic, setTopic, nextStep }) {
   );
 }
 
-function StreamTitlesForm({ topic, setTitle, nextStep, prevStep }) {
+function StreamTitlesForm({ topic, setTitle, nextStep, prevStep }: any) {
   const { complete, isLoading, completion, setCompletion, stop } = useCompletion({
     api: '/openai/stream',
   });
@@ -133,7 +133,7 @@ function StreamTitlesForm({ topic, setTitle, nextStep, prevStep }) {
   return null;
 }
 
-function ConfirmPost({ title, prevStep }) {
+function ConfirmPost({ title, prevStep }: any) {
   return (
     <form action={createPostAction} className="space-y-4 mt-4">
       <input type="hidden" name="title" value={title} />
