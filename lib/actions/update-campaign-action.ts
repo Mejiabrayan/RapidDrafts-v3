@@ -13,9 +13,7 @@ export async function updateCampaignAction(formData: FormData) {
       return { error: 'Authentication failed' }
     }
 
-    const idString = formData.get('id') as string
-    const id = parseInt(idString, 10)
-
+    const id = parseInt(formData.get('id') as string, 10)
     if (isNaN(id)) {
       return { error: 'Invalid campaign ID' }
     }
@@ -36,7 +34,7 @@ export async function updateCampaignAction(formData: FormData) {
     })
 
     revalidatePath(`/dashboard/campaigns/${id}`)
-    return { success: true, campaignId: updatedCampaign.id }
+    return { success: true, campaignId: id }
   } catch (error) {
     console.error('Failed to update campaign:', error)
     return { error: error instanceof Error ? error.message : 'Unknown error occurred' }
