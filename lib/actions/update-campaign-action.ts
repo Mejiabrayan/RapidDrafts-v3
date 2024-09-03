@@ -2,20 +2,22 @@
 
 import { revalidatePath } from 'next/cache'
 import getSupabaseServerActionClient from '@/lib/supabase/action-client'
-import { insertCampaign } from '@/lib/mutations/campaigns'
+import { updateCampaign } from '@/lib/mutations/campaigns'
 
-export async function createCampaignAction(formData: FormData) {
+export async function updateCampaignAction(formData: FormData) {
   try {
     const supabase = getSupabaseServerActionClient()
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
-    if (authError) {
-      console.error('Auth error:', authError)
-      return { error: `Authentication failed: ${authError.message}` }
+    if (authError || !user) {
+      return { error: 'Authentication failed' }
     }
 
-    if (!user) {
-      return { error: 'User not found' }
+    const idString = formData.get('id') as string
+    const id = parseInt(idString, 10)
+
+    if (isNaN(id)) {
+      return { error: 'Invalid campaign ID' }
     }
 
     const campaignName = formData.get('campaignName') as string
@@ -26,18 +28,17 @@ export async function createCampaignAction(formData: FormData) {
       return { error: 'Missing required fields' }
     }
 
-    const campaign = await insertCampaign(supabase, {
+    const updatedCampaign = await updateCampaign(supabase, {
+      id,
       campaign_name: campaignName,
       campaign_brief: campaignBrief,
       target_channels: targetChannels,
-      user_id: user.id,
-      status: 'draft'
     })
 
-    revalidatePath('/dashboard/campaigns')
-    return { success: true, campaignId: campaign.id }
+    revalidatePath(`/dashboard/campaigns/${id}`)
+    return { success: true, campaignId: updatedCampaign.id }
   } catch (error) {
-    console.error('Failed to create campaign:', error)
+    console.error('Failed to update campaign:', error)
     return { error: error instanceof Error ? error.message : 'Unknown error occurred' }
   }
 }

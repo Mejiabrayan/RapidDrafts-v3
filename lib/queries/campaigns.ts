@@ -19,6 +19,7 @@ export async function getCampaign(client: Client, id: number) {
     .single();
 
   if (error) {
+    console.error('Error fetching campaign:', error);
     throw error;
   }
 

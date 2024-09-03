@@ -27,7 +27,7 @@ async function EditPage({ params }: EditPostPageParams) {
 
 function EditForm({ post }: any) {
   return (
-    <form action={updatePostAction} className="flex flex-col h-full">
+    <form action={updatePostAction} className="flex flex-col h-full bg-black">
       <input type="hidden" name="uid" value={post.uuid} />
 
       <div className="flex-grow flex flex-col space-y-6 overflow-auto">

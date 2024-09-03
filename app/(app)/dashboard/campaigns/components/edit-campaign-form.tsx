@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
-import { createCampaignAction } from '@/lib/actions/create-campaign-action'
+import { updateCampaignAction } from '@/lib/actions/update-campaign-action'
 
 const channels = [
   { id: 'blog', label: 'Blog' },
@@ -14,7 +14,16 @@ const channels = [
   { id: 'email', label: 'Email' },
 ]
 
-export function CampaignForm() {
+interface EditCampaignFormProps {
+  campaign: {
+    id: number;
+    campaign_name: string;
+    campaign_brief: string;
+    target_channels: string[];
+  }
+}
+
+export function EditCampaignForm({ campaign }: EditCampaignFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
@@ -25,14 +34,21 @@ export function CampaignForm() {
     setError(null)
 
     const formData = new FormData(event.currentTarget)
+    formData.append('id', campaign.id.toString())
     
     try {
-      await createCampaignAction(formData)
-      router.push('/dashboard/campaigns')
-      router.refresh()
+      const result = await updateCampaignAction(formData)
+      if (result.error) {
+        setError(result.error)
+      } else if (result.success) {
+        router.push(`/dashboard/campaigns/${result.campaignId}`)
+        router.refresh()
+      } else {
+        setError('Failed to update campaign')
+      }
     } catch (error) {
-      console.error('Failed to create campaign:', error)
-      setError(error instanceof Error ? error.message : 'Failed to create campaign. Please try again.')
+      console.error('Failed to update campaign:', error)
+      setError('An unexpected error occurred. Please try again.')
     } finally {
       setIsLoading(false)
     }
@@ -43,25 +59,32 @@ export function CampaignForm() {
       <Input
         name="campaignName"
         placeholder="Campaign Name"
+        defaultValue={campaign.campaign_name}
         required
       />
       <Textarea
         name="campaignBrief"
         placeholder="Campaign Brief"
+        defaultValue={campaign.campaign_brief}
         required
       />
       <div>
         <h3 className="mb-4 font-medium">Target Channels</h3>
         {channels.map((channel) => (
           <div key={channel.id} className="flex items-center space-x-2">
-            <Checkbox id={channel.id} name="targetChannels" value={channel.id} />
+            <Checkbox 
+              id={channel.id} 
+              name="targetChannels" 
+              value={channel.id}
+              defaultChecked={campaign.target_channels.includes(channel.id)}
+            />
             <label htmlFor={channel.id}>{channel.label}</label>
           </div>
         ))}
       </div>
       {error && <p className="text-red-500">{error}</p>}
       <Button type="submit" disabled={isLoading}>
-        {isLoading ? 'Creating...' : 'Create Campaign'}
+        {isLoading ? 'Updating...' : 'Update Campaign'}
       </Button>
     </form>
   )
